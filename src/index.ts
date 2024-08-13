@@ -1,6 +1,7 @@
 import { exit } from 'node:process';
 
 import fastify from 'fastify';
+import 'dotenv/config';
 
 const server = fastify();
 
