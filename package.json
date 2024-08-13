@@ -22,7 +22,7 @@
     "eslint-plugin-n": "^17.10.2",
     "globals": "^15.9.0",
     "husky": "^9.1.4",
-    "lint-staged": "^15.2.7",
+    "lint-staged": "^15.2.9",
     "prettier": "3.3.3",
     "prisma": "^5.18.0",
     "ts-node": "^10.9.2",
