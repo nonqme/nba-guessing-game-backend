@@ -10,5 +10,4 @@ export type NBAPlayer = {
   draftYear: number;
   draftRound: number;
   draftNumber: number;
-  draftTeam: string;
 };
