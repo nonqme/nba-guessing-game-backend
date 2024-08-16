@@ -1,10 +1,11 @@
 import type { NBAPlayer } from './types';
 
 export interface INBAPlayerRepository {
-  saveNBAPlayerOfTheDay(player: NBAPlayer): Promise<void>;
-  deleteNBAPlayerOfTheDay(): Promise<void>;
+  getAll(): Promise<NBAPlayer[]>;
 }
 
-export interface INBAPlayerService {
-  getRandomNBAPlayer(): Promise<NBAPlayer>;
+export interface INBAPlayerOfTheDayRepository {
+  get(): Promise<NBAPlayer | null>;
+  save(player: NBAPlayer): Promise<void>;
+  delete(): Promise<void>;
 }

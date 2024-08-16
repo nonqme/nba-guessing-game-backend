@@ -7,7 +7,4 @@ export type NBAPlayer = {
   college: string;
   team: string;
   position: string;
-  draftYear: number;
-  draftRound: number;
-  draftNumber: number;
 };

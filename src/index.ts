@@ -2,14 +2,15 @@ import { exit } from 'node:process';
 
 import fastify from 'fastify';
 import 'dotenv/config';
+import { PrismaClient } from '@prisma/client';
+import cron from 'node-cron';
 
-import type { NBAPlayer } from './types';
-import type { INBAPlayerRepository, INBAPlayerService } from './interfaces';
-import { GetRandomNBAPlayer } from './use-cases/GetRandomNBAPlayer';
-import { NBAPlayerService } from './services/NBAPlayerService';
-import { FakeNBAPlayerRepository } from './repositories/FakeNBAPlayerRepository';
+import { SetNBAPlayerOfTheDay } from './use-cases/SetNBAPlayerOfTheDay';
+import { NBAPlayerRepository } from './repositories/NBAPlayerRepository';
+import { NBAPlayerOfTheDayRepository } from './repositories/NBAPlayerOfTheDayRepository';
 
 const server = fastify();
+export const prisma = new PrismaClient();
 
 server.listen({ port: 8080 }, async (err, address) => {
   if (err) {
@@ -17,18 +18,20 @@ server.listen({ port: 8080 }, async (err, address) => {
     exit(1);
   }
   console.log(`Server listening at ${address}`);
+  await initApp();
+});
 
-  const nbaPlayerService: INBAPlayerService = new NBAPlayerService();
-  const fakeNBAPlayerRepository: INBAPlayerRepository =
-    new FakeNBAPlayerRepository();
+async function initApp() {
+  prisma.$connect();
+  const nbaPlayerRepository = new NBAPlayerRepository();
+  const nbaPlayerOfTheDayRepository = new NBAPlayerOfTheDayRepository();
+  if (nbaPlayerOfTheDayRepository.get() === null) {
+    const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(nbaPlayerRepository, nbaPlayerOfTheDayRepository);
+    await setNBAPlayerOfTheDay.execute();
+  }
+}
 
-  const getRandomNBAPlayer = new GetRandomNBAPlayer(
-    nbaPlayerService,
-    fakeNBAPlayerRepository
-  );
-
-  const randomPlayer: NBAPlayer = await getRandomNBAPlayer.execute();
-  console.log('Player of the day is:', randomPlayer.name);
-
-  server.close();
+cron.schedule('0 0 * * *', async () => {
+  const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(new NBAPlayerRepository(), new NBAPlayerOfTheDayRepository());
+  await setNBAPlayerOfTheDay.execute();
 });
