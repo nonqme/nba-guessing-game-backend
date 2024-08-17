@@ -1,11 +1,14 @@
-import type { INBAPlayerOfTheDayRepository } from '../interfaces';
+import type { INBAPlayerOfTheDayRepository, IDBClient } from '../interfaces';
 import type { NBAPlayer } from '../types';
 
-import { prisma } from '../index';
-
 export class NBAPlayerOfTheDayRepository implements INBAPlayerOfTheDayRepository {
+  #dbClient: IDBClient;
+  constructor(dbClient: IDBClient) {
+    this.#dbClient = dbClient;
+  }
+
   async get(): Promise<NBAPlayer | null> {
-    const player = await prisma.nBAPlayerOfTheDay.findFirst();
+    const player = await this.#dbClient.findFirst<NBAPlayer>('nBAPlayerOfTheDay');
     if (!player) return null;
     return {
       id: player.id,
@@ -20,21 +23,10 @@ export class NBAPlayerOfTheDayRepository implements INBAPlayerOfTheDayRepository
   }
 
   async save(player: NBAPlayer): Promise<void> {
-    await prisma.nBAPlayerOfTheDay.create({
-      data: {
-        id: player.id,
-        name: player.name,
-        height: player.height,
-        weight: player.weight,
-        country: player.country,
-        college: player.college,
-        team: player.team,
-        position: player.position,
-      },
-    });
+    await this.#dbClient.create<NBAPlayer>('nBAPlayerOfTheDay', player);
   }
 
   async delete(): Promise<void> {
-    await prisma.nBAPlayerOfTheDay.deleteMany();
+    await this.#dbClient.deleteMany('nBAPlayerOfTheDay');
   }
 }

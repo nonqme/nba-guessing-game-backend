@@ -9,8 +9,11 @@ import { SetNBAPlayerOfTheDay } from './use-cases/SetNBAPlayerOfTheDay';
 import { NBAPlayerRepository } from './repositories/NBAPlayerRepository';
 import { NBAPlayerOfTheDayRepository } from './repositories/NBAPlayerOfTheDayRepository';
 
+import { DBClient } from './commons/dbClient';
+
 const server = fastify();
 export const prisma = new PrismaClient();
+const dbClient = new DBClient(prisma);
 
 server.listen({ port: 8080 }, async (err, address) => {
   if (err) {
@@ -24,14 +27,18 @@ server.listen({ port: 8080 }, async (err, address) => {
 async function initApp() {
   prisma.$connect();
   const nbaPlayerRepository = new NBAPlayerRepository();
-  const nbaPlayerOfTheDayRepository = new NBAPlayerOfTheDayRepository();
-  if (nbaPlayerOfTheDayRepository.get() === null) {
+  const nbaPlayerOfTheDayRepository = new NBAPlayerOfTheDayRepository(dbClient);
+  const playerExists = await nbaPlayerOfTheDayRepository.get();
+  if (playerExists === null) {
     const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(nbaPlayerRepository, nbaPlayerOfTheDayRepository);
     await setNBAPlayerOfTheDay.execute();
   }
 }
 
 cron.schedule('0 0 * * *', async () => {
-  const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(new NBAPlayerRepository(), new NBAPlayerOfTheDayRepository());
+  const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(
+    new NBAPlayerRepository(),
+    new NBAPlayerOfTheDayRepository(dbClient)
+  );
   await setNBAPlayerOfTheDay.execute();
 });
