@@ -1,12 +1,16 @@
 import type { NBAPlayer } from '../types';
-import type { INBAPlayerRepository } from '../interfaces';
+import type { INBAPlayerRepository, IFetcher } from '../interfaces';
 
 export class NBAPlayerRepository implements INBAPlayerRepository {
+  #fetcher: IFetcher;
+  constructor(fetcher: IFetcher) {
+    this.#fetcher = fetcher;
+  }
   async getAll(): Promise<NBAPlayer[]> {
     const API_URL = new URL('https://stats.nba.com/stats/playerindex');
     API_URL.searchParams.append('LeagueID', '00');
     API_URL.searchParams.append('Season', '2024-25');
-    const response = await fetch(API_URL, {
+    const response = await this.#fetcher.fetch(API_URL, {
       headers: { Referer: 'https://www.nba.com/' },
       body: null,
       method: 'GET',

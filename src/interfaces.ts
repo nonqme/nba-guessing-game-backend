@@ -15,3 +15,7 @@ export interface IDBClient {
   create<T>(table: string, data: T): Promise<void>;
   deleteMany(table: string): Promise<void>;
 }
+
+export interface IFetcher {
+  fetch(url: URL, options: RequestInit): Promise<Response>;
+}
