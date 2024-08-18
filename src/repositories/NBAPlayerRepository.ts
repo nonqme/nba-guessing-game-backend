@@ -24,6 +24,11 @@ export class NBAPlayerRepository implements INBAPlayerRepository {
     return players.map(this.#mapToNBAPlayer);
   }
 
+  async getByName(name: string): Promise<NBAPlayer | null> {
+    const players = await this.getAll();
+    return players.find((player) => player.name.toLowerCase() === name.toLowerCase()) || null;
+  }
+
   #mapToNBAPlayerDTO(keys: string[], player: []): Record<string, unknown> {
     return keys.reduce((acc: Record<string, unknown>, key: string, index: number) => {
       acc[key] = player[index];

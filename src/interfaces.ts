@@ -2,6 +2,7 @@ import type { NBAPlayer } from './types';
 
 export interface INBAPlayerRepository {
   getAll(): Promise<NBAPlayer[]>;
+  getByName(name: string): Promise<NBAPlayer | null>;
 }
 
 export interface INBAPlayerOfTheDayRepository {

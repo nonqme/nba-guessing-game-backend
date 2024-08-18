@@ -53,4 +53,64 @@ describe('NBAPlayerRepository', () => {
     assert.strictEqual(typeof players[0].team, typeof wantedObject.team);
     assert.strictEqual(typeof players[0].position, typeof wantedObject.position);
   });
+
+  it('should return null if player is not found on getByName', async () => {
+    const fakeFetcher: IFetcher = {
+      fetch: async () =>
+        ({
+          ok: true,
+          json: async () => ({
+            resultSets: [
+              {
+                headers: [
+                  'PERSON_ID',
+                  'PLAYER_FIRST_NAME',
+                  'PLAYER_LAST_NAME',
+                  'HEIGHT',
+                  'WEIGHT',
+                  'COUNTRY',
+                  'COLLEGE',
+                  'TEAM_NAME',
+                  'POSITION',
+                ],
+                rowSet: [[203932, 'Aaron', 'Gordon', '6-8', 235, 'USA', 'Arizona', 'Denver Nuggets', 'F']],
+              },
+            ],
+          }),
+        }) as Response,
+    };
+    const repository = new NBAPlayerRepository(fakeFetcher);
+    const player = await repository.getByName('Kobe Bryant');
+    assert.strictEqual(player, null);
+  });
+
+  it('should return player if found on getByName', async () => {
+    const fakeFetcher: IFetcher = {
+      fetch: async () =>
+        ({
+          ok: true,
+          json: async () => ({
+            resultSets: [
+              {
+                headers: [
+                  'PERSON_ID',
+                  'PLAYER_FIRST_NAME',
+                  'PLAYER_LAST_NAME',
+                  'HEIGHT',
+                  'WEIGHT',
+                  'COUNTRY',
+                  'COLLEGE',
+                  'TEAM_NAME',
+                  'POSITION',
+                ],
+                rowSet: [[203932, 'Aaron', 'Gordon', '6-8', 235, 'USA', 'Arizona', 'Denver Nuggets', 'F']],
+              },
+            ],
+          }),
+        }) as Response,
+    };
+    const repository = new NBAPlayerRepository(fakeFetcher);
+    const player = await repository.getByName('aaron gordon');
+    assert.strictEqual(player?.name, 'Aaron Gordon');
+  });
 });

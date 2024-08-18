@@ -7,9 +7,9 @@ export const nbaPlayers: NBAPlayer[] = [
     height: '6 ft 9 in',
     weight: 250,
     country: 'USA',
-    college: 'None',
+    college: 'St. Vincent–St. Mary',
     team: 'Los Angeles Lakers',
-    position: 'SF',
+    position: 'G-F',
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ export const nbaPlayers: NBAPlayer[] = [
     country: 'USA',
     college: 'Davidson',
     team: 'Golden State Warriors',
-    position: 'PG',
+    position: 'G',
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ export const nbaPlayers: NBAPlayer[] = [
     country: 'USA',
     college: 'Texas',
     team: 'Brooklyn Nets',
-    position: 'SF',
+    position: 'G-F-C',
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ export const nbaPlayers: NBAPlayer[] = [
     country: 'Greece',
     college: 'None',
     team: 'Milwaukee Bucks',
-    position: 'PF',
+    position: 'F-C',
   },
   {
     id: 5,
@@ -49,7 +49,7 @@ export const nbaPlayers: NBAPlayer[] = [
     country: 'USA',
     college: 'Arizona State',
     team: 'Philadelphia 76ers',
-    position: 'SG',
+    position: 'G',
   },
   {
     id: 6,
@@ -59,7 +59,7 @@ export const nbaPlayers: NBAPlayer[] = [
     country: 'USA',
     college: 'San Diego State',
     team: 'Los Angeles Clippers',
-    position: 'SF',
+    position: 'G-F',
   },
   {
     id: 7,
@@ -69,7 +69,7 @@ export const nbaPlayers: NBAPlayer[] = [
     country: 'Slovenia',
     college: 'None',
     team: 'Dallas Mavericks',
-    position: 'PG',
+    position: 'G',
   },
   {
     id: 8,
@@ -99,6 +99,6 @@ export const nbaPlayers: NBAPlayer[] = [
     country: 'USA',
     college: 'Weber State',
     team: 'Portland Trail Blazers',
-    position: 'PG',
+    position: 'G',
   },
 ];

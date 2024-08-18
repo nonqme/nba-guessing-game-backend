@@ -14,7 +14,7 @@ describe('We want to change the nba player of the day', () => {
       getAll: async () => {
         return nbaPlayers;
       },
-    };
+    } as INBAPlayerRepository;
     const nbaPlayerOfTheDayRepository: INBAPlayerOfTheDayRepository = {
       get: async () => null,
       save: async (player: NBAPlayer) => {
