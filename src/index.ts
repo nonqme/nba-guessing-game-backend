@@ -1,9 +1,6 @@
-import { exit } from 'node:process';
-
-import fastify from 'fastify';
-import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
 import cron from 'node-cron';
+import fastify from 'fastify';
+import { PrismaClient } from '@prisma/client';
 
 import { SetNBAPlayerOfTheDay } from './use-cases/SetNBAPlayerOfTheDay';
 import { NBAPlayerRepository } from './repositories/NBAPlayerRepository';
@@ -12,49 +9,36 @@ import { NBAPlayerOfTheDayRepository } from './repositories/NBAPlayerOfTheDayRep
 import { DBClient } from './commons/DBClient';
 import { Fetcher } from './commons/Fetcher';
 
-import { guess } from './routes/guess';
-
-const server = fastify();
-export const prisma = new PrismaClient();
-export const dbClient = new DBClient(prisma);
-export const fetcher = new Fetcher();
+export const server = fastify();
+const prisma = new PrismaClient();
+const dbClient = new DBClient(prisma);
+const fetcher = new Fetcher();
+export const nbaPlayerRepository = new NBAPlayerRepository(fetcher);
+export const nbaPlayerOfTheDayRepository = new NBAPlayerOfTheDayRepository(dbClient);
 
 server.listen({ port: 8080 }, async (err, address) => {
   if (err) {
-    console.error(err);
-    exit(1);
+    throw new Error('Failed to start server');
   }
   console.log(`Server listening at ${address}`);
   await initApp();
 });
 
-import { FastifyRequest } from 'fastify';
-
-server.post('/guess', async (request: FastifyRequest<{ Body: { guess: string } }>, reply) => {
-  const answer = request.body.guess;
-  const result = await guess(answer);
-  reply.send(result);
-});
-
 async function initApp() {
-  prisma.$connect();
-  const nbaPlayerRepository = new NBAPlayerRepository(fetcher);
-  const nbaPlayerOfTheDayRepository = new NBAPlayerOfTheDayRepository(dbClient);
+  await prisma.$connect();
   const playerExists = await nbaPlayerOfTheDayRepository.get();
-  if (playerExists === null) {
-    const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(nbaPlayerRepository, nbaPlayerOfTheDayRepository);
-    const playerOfTheDay = await setNBAPlayerOfTheDay.execute();
-    console.log('Player of the day set');
-    console.log(`It is ${playerOfTheDay.name}`);
+  if (!playerExists) {
+    await setPlayerOfTheDay();
   }
 }
 
-cron.schedule('0 0 * * *', async () => {
-  const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(
-    new NBAPlayerRepository(fetcher),
-    new NBAPlayerOfTheDayRepository(dbClient)
-  );
+async function setPlayerOfTheDay() {
+  const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(nbaPlayerRepository, nbaPlayerOfTheDayRepository);
   const playerOfTheDay = await setNBAPlayerOfTheDay.execute();
   console.log('Player of the day set');
   console.log(`It is ${playerOfTheDay.name}`);
+}
+
+cron.schedule('0 0 * * *', async () => {
+  await setPlayerOfTheDay();
 });

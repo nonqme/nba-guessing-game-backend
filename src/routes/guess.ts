@@ -1,14 +1,20 @@
+import type { FastifyRequest } from 'fastify';
+
 import type { GuessingResult } from '../types';
+import { server } from '../index';
 
 import { GuessPlayerOfTheDay } from '../use-cases/GuessPlayerOfTheDay';
-import { NBAPlayerOfTheDayRepository } from '../repositories/NBAPlayerOfTheDayRepository';
-import { NBAPlayerRepository } from '../repositories/NBAPlayerRepository';
-import { fetcher, dbClient } from '../index';
+import { nbaPlayerOfTheDayRepository, nbaPlayerRepository } from '../index';
 
-export async function guess(guess: string): Promise<GuessingResult> {
-  const nbaPlayerRepository = new NBAPlayerRepository(fetcher);
-  const nbaPlayerOfTheDayRepository = new NBAPlayerOfTheDayRepository(dbClient);
-  const guessPlayerOfTheDay = new GuessPlayerOfTheDay(nbaPlayerOfTheDayRepository, nbaPlayerRepository);
-
-  return guessPlayerOfTheDay.execute(guess);
-}
+server.post('/guess', async (request: FastifyRequest<{ Body: { guess: string } }>, reply) => {
+  try {
+    if (!request.body.guess) throw new Error('Missing guess parameter');
+    const { guess } = request.body;
+    const guessPlayerOfTheDay = new GuessPlayerOfTheDay(nbaPlayerOfTheDayRepository, nbaPlayerRepository);
+    const result: GuessingResult = await guessPlayerOfTheDay.execute(guess);
+    reply.send(result);
+  } catch (error) {
+    const typedError = error as Error;
+    reply.code(500).send({ message: typedError.message });
+  }
+});
