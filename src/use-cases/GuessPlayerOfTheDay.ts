@@ -29,10 +29,6 @@ export class GuessPlayerOfTheDay {
         value: player.height,
         correct: player.height.toLowerCase() === playerOfTheDay.height.toLowerCase() ? 'correct' : 'incorrect',
       },
-      weight: {
-        value: player.weight,
-        correct: player.weight === playerOfTheDay.weight ? 'correct' : 'incorrect',
-      },
       country: {
         value: player.country,
         correct: player.country.toLowerCase() === playerOfTheDay.country.toLowerCase() ? 'correct' : 'incorrect',
@@ -57,7 +53,6 @@ export class GuessPlayerOfTheDay {
   #checkPosition(player: NBAPlayer, playerOfTheDay: NBAPlayer): GuessingAccuracy {
     const playerPosition = player.position.split('-');
     const playerOfTheDayPosition = playerOfTheDay.position.split('-');
-    // Check if array values are the same
     if (playerPosition.every((position) => playerOfTheDayPosition.includes(position))) {
       return 'correct';
     } else if (playerPosition.some((position) => playerOfTheDayPosition.includes(position))) {

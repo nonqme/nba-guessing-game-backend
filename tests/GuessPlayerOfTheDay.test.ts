@@ -24,7 +24,6 @@ describe('We want to guess the NBA player of the day', () => {
 
     assert.deepStrictEqual(result.name.correct, 'correct');
     assert.deepStrictEqual(result.height.correct, 'correct');
-    assert.deepStrictEqual(result.weight.correct, 'correct');
     assert.deepStrictEqual(result.country.correct, 'correct');
     assert.deepStrictEqual(result.college.correct, 'correct');
     assert.deepStrictEqual(result.team.correct, 'correct');
@@ -47,7 +46,6 @@ describe('We want to guess the NBA player of the day', () => {
 
     assert.deepStrictEqual(result.name.correct, 'incorrect');
     assert.deepStrictEqual(result.height.correct, 'incorrect');
-    assert.deepStrictEqual(result.weight.correct, 'incorrect');
     assert.deepStrictEqual(result.country.correct, 'incorrect');
     assert.deepStrictEqual(result.college.correct, 'incorrect');
     assert.deepStrictEqual(result.team.correct, 'incorrect');

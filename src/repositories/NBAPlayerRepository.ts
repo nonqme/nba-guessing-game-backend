@@ -21,7 +21,8 @@ export class NBAPlayerRepository implements INBAPlayerRepository {
     const players: Record<string, unknown>[] = data.resultSets[0].rowSet.map((player) =>
       this.#mapToNBAPlayerDTO(keys, player)
     );
-    return players.map(this.#mapToNBAPlayer);
+    const filteredPlayerByRosterStatus = players.filter((player) => player.ROSTER_STATUS !== null);
+    return filteredPlayerByRosterStatus.map(this.#mapToNBAPlayer);
   }
 
   async getByName(name: string): Promise<NBAPlayer | null> {
@@ -41,7 +42,6 @@ export class NBAPlayerRepository implements INBAPlayerRepository {
       id: player.PERSON_ID as number,
       name: `${player.PLAYER_FIRST_NAME} ${player.PLAYER_LAST_NAME}`,
       height: player.HEIGHT as string,
-      weight: Number(player.WEIGHT),
       country: player.COUNTRY as string,
       college: player.COLLEGE as string,
       team: player.TEAM_NAME as string,

@@ -14,7 +14,6 @@ export class NBAPlayerOfTheDayRepository implements INBAPlayerOfTheDayRepository
       id: player.id,
       name: player.name,
       height: player.height,
-      weight: player.weight,
       country: player.country,
       college: player.college,
       team: player.team,

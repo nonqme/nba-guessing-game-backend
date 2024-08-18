@@ -18,13 +18,12 @@ describe('NBAPlayerRepository', () => {
                   'PLAYER_FIRST_NAME',
                   'PLAYER_LAST_NAME',
                   'HEIGHT',
-                  'WEIGHT',
                   'COUNTRY',
                   'COLLEGE',
                   'TEAM_NAME',
                   'POSITION',
                 ],
-                rowSet: [[203932, 'Aaron', 'Gordon', '6-8', 235, 'USA', 'Arizona', 'Denver Nuggets', 'F']],
+                rowSet: [[203932, 'Aaron', 'Gordon', '6-8', 'USA', 'Arizona', 'Denver Nuggets', 'F']],
               },
             ],
           }),
@@ -36,7 +35,6 @@ describe('NBAPlayerRepository', () => {
       id: 203932,
       name: 'Aaron Gordon',
       height: '6-8',
-      weight: 235,
       country: 'USA',
       college: 'Arizona',
       team: 'Denver Nuggets',
@@ -47,7 +45,6 @@ describe('NBAPlayerRepository', () => {
     assert.strictEqual(typeof players[0].id, typeof wantedObject.id);
     assert.strictEqual(typeof players[0].name, typeof wantedObject.name);
     assert.strictEqual(typeof players[0].height, typeof wantedObject.height);
-    assert.strictEqual(typeof players[0].weight, typeof wantedObject.weight);
     assert.strictEqual(typeof players[0].country, typeof wantedObject.country);
     assert.strictEqual(typeof players[0].college, typeof wantedObject.college);
     assert.strictEqual(typeof players[0].team, typeof wantedObject.team);
@@ -73,7 +70,7 @@ describe('NBAPlayerRepository', () => {
                   'TEAM_NAME',
                   'POSITION',
                 ],
-                rowSet: [[203932, 'Aaron', 'Gordon', '6-8', 235, 'USA', 'Arizona', 'Denver Nuggets', 'F']],
+                rowSet: [[203932, 'Aaron', 'Gordon', '6-8', 'USA', 'Arizona', 'Denver Nuggets', 'F']],
               },
             ],
           }),
@@ -97,13 +94,12 @@ describe('NBAPlayerRepository', () => {
                   'PLAYER_FIRST_NAME',
                   'PLAYER_LAST_NAME',
                   'HEIGHT',
-                  'WEIGHT',
                   'COUNTRY',
                   'COLLEGE',
                   'TEAM_NAME',
                   'POSITION',
                 ],
-                rowSet: [[203932, 'Aaron', 'Gordon', '6-8', 235, 'USA', 'Arizona', 'Denver Nuggets', 'F']],
+                rowSet: [[203932, 'Aaron', 'Gordon', '6-8', 'USA', 'Arizona', 'Denver Nuggets', 'F']],
               },
             ],
           }),
