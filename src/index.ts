@@ -9,13 +9,15 @@ import { SetNBAPlayerOfTheDay } from './use-cases/SetNBAPlayerOfTheDay';
 import { NBAPlayerRepository } from './repositories/NBAPlayerRepository';
 import { NBAPlayerOfTheDayRepository } from './repositories/NBAPlayerOfTheDayRepository';
 
-import { DBClient } from './commons/dbClient';
+import { DBClient } from './commons/DBClient';
 import { Fetcher } from './commons/Fetcher';
+
+import { guess } from './routes/guess';
 
 const server = fastify();
 export const prisma = new PrismaClient();
-const dbClient = new DBClient(prisma);
-const fetcher = new Fetcher();
+export const dbClient = new DBClient(prisma);
+export const fetcher = new Fetcher();
 
 server.listen({ port: 8080 }, async (err, address) => {
   if (err) {
@@ -26,6 +28,14 @@ server.listen({ port: 8080 }, async (err, address) => {
   await initApp();
 });
 
+import { FastifyRequest } from 'fastify';
+
+server.post('/guess', async (request: FastifyRequest<{ Body: { guess: string } }>, reply) => {
+  const answer = request.body.guess;
+  const result = await guess(answer);
+  reply.send(result);
+});
+
 async function initApp() {
   prisma.$connect();
   const nbaPlayerRepository = new NBAPlayerRepository(fetcher);
@@ -33,7 +43,9 @@ async function initApp() {
   const playerExists = await nbaPlayerOfTheDayRepository.get();
   if (playerExists === null) {
     const setNBAPlayerOfTheDay = new SetNBAPlayerOfTheDay(nbaPlayerRepository, nbaPlayerOfTheDayRepository);
-    await setNBAPlayerOfTheDay.execute();
+    const playerOfTheDay = await setNBAPlayerOfTheDay.execute();
+    console.log('Player of the day set');
+    console.log(`It is ${playerOfTheDay.name}`);
   }
 }
 
@@ -42,5 +54,7 @@ cron.schedule('0 0 * * *', async () => {
     new NBAPlayerRepository(fetcher),
     new NBAPlayerOfTheDayRepository(dbClient)
   );
-  await setNBAPlayerOfTheDay.execute();
+  const playerOfTheDay = await setNBAPlayerOfTheDay.execute();
+  console.log('Player of the day set');
+  console.log(`It is ${playerOfTheDay.name}`);
 });
