@@ -39,7 +39,7 @@ describe('FastifyServer', () => {
       const body = await response.text();
       assert.strictEqual(body, 'ok');
     } catch (error) {
-      // If the server fails to start, we should fail the test
+      // If the fetch fails, we should fail the test
       assert.ok(false, (error as Error).message);
     }
   });
@@ -48,6 +48,7 @@ describe('FastifyServer', () => {
     try {
       await server.stop();
       await fetch(TEST_URL);
+      assert(false, 'Server should be stopped');
     } catch (error) {
       // Fetch should fail because the server is no longer running
       assert.ok(true, (error as Error).message);
