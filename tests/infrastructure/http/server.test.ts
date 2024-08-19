@@ -1,7 +1,9 @@
-import { describe, it } from 'node:test';
+import { describe, it, type Mock, mock } from 'node:test';
 import assert from 'node:assert';
 
-import { IServer } from '../../../src/core/commons/http';
+import type { IServer } from '../../../src/core/commons/http';
+import type { IScheduler } from '../../../src/core/commons/scheduler';
+
 import { FastifyServer } from '../../../src/infrastructure/http/server';
 import type { RouteOptions } from 'fastify';
 
@@ -9,18 +11,27 @@ describe('FastifyServer', () => {
   const TEST_HOST: string = 'localhost';
   const TEST_PORT: number = 3000;
   const TEST_URL: URL = new URL(`http://${TEST_HOST}:${TEST_PORT}`);
-  const route: RouteOptions = {
-    method: 'GET',
-    url: '/health',
-    schema: {
-      querystring: {},
-      response: {},
-    },
-    handler: (_request, reply) => {
-      reply.send('ok');
-    },
+
+  const scheduler: IScheduler = {
+    scheduleEveryDayAt: () => {},
   };
-  const server: IServer = new FastifyServer(TEST_HOST, TEST_PORT, [route]);
+
+  const mockScheduler: Mock<IScheduler['scheduleEveryDayAt']> = mock.method(scheduler, 'scheduleEveryDayAt');
+
+  const routes: RouteOptions[] = [
+    {
+      method: 'GET',
+      url: '/health',
+      schema: {
+        querystring: {},
+        response: {},
+      },
+      handler: (_request, reply) => {
+        reply.send('ok');
+      },
+    },
+  ];
+  const server: IServer = new FastifyServer(TEST_HOST, TEST_PORT, routes, scheduler);
   it('should start the server', async () => {
     try {
       await server.start();
@@ -31,6 +42,13 @@ describe('FastifyServer', () => {
       // If the server fails to start, we should fail the test
       assert.ok(false, (error as Error).message);
     }
+  });
+
+  it('should schedule a task to run every day at 00:00', () => {
+    // We expect the scheduler to be called once with the correct arguments
+    assert.strictEqual(mockScheduler.mock.calls.length, 1);
+    assert.strictEqual(mockScheduler.mock.calls[0].arguments[0], 0);
+    assert.strictEqual(mockScheduler.mock.calls[0].arguments[1], 0);
   });
 
   it('should return ok on /health', async () => {
