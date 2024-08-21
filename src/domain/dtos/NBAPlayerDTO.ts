@@ -10,6 +10,8 @@ export class NBAPlayerDTO {
   #weight: number;
   #country: string;
 
+  #portrait: URL;
+
   #team: string;
   #position: NBAPosition[];
   #number: number;
@@ -32,6 +34,8 @@ export class NBAPlayerDTO {
     weight: number,
     country: string,
 
+    portrait: URL,
+
     team: string,
     position: NBAPosition[],
     number: number,
@@ -45,18 +49,24 @@ export class NBAPlayerDTO {
     assistsPerGame: number
   ) {
     this.#id = id;
+
     this.#firstName = firstName;
     this.#lastName = lastName;
     this.#age = age;
     this.#height = height;
     this.#weight = weight;
     this.#country = country;
+
+    this.#portrait = portrait;
+
     this.#team = team;
     this.#position = position;
     this.#number = number;
+
     this.#draftYear = draftYear;
     this.#draftRound = draftRound;
     this.#draftNumber = draftNumber;
+
     this.#pointPerGame = pointPerGame;
     this.#reboundsPerGame = reboundsPerGame;
     this.#assistsPerGame = assistsPerGame;
@@ -87,6 +97,10 @@ export class NBAPlayerDTO {
 
   get country(): string {
     return this.#country;
+  }
+
+  get portrait(): URL {
+    return this.#portrait;
   }
 
   get team(): string {
