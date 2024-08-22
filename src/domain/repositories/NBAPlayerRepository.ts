@@ -1,5 +1,6 @@
-import { NBAPlayerDTO } from '../dtos/NBAPlayerDTO';
+import type { BasicNBAPlayerDTO } from '../dtos/BasicNBAPlayerDTO';
 
 export interface NBAPlayerRepository {
-  getAll(): Promise<NBAPlayerDTO[]>;
+  getAll(): Promise<BasicNBAPlayerDTO[]>;
+  searchByName(name: string): Promise<BasicNBAPlayerDTO[]>;
 }
