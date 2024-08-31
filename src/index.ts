@@ -1,5 +1,7 @@
-import 'dotenv/config';
+import fastify from 'fastify';
 
-const init = async () => {};
+export function build(opts = {}) {
+  const app = fastify(opts);
 
-init();
+  return app;
+}
