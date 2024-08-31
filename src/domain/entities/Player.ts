@@ -7,7 +7,7 @@ export type PlayerData = {
   birthDate: number;
   height: string;
   team: string;
-  position: PlayerPosition;
+  positions: PlayerPosition[];
 };
 
 export class Player {
@@ -18,9 +18,9 @@ export class Player {
   birthDate: number;
   height: string;
   team: string;
-  position: PlayerPosition;
+  positions: PlayerPosition[];
 
-  constructor({ id, firstName, lastName, country, birthDate, height, team, position }: PlayerData) {
+  constructor({ id, firstName, lastName, country, birthDate, height, team, positions }: PlayerData) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -28,7 +28,7 @@ export class Player {
     this.birthDate = birthDate;
     this.height = height;
     this.team = team;
-    this.position = position;
+    this.positions = positions;
   }
 
   get fullName() {
