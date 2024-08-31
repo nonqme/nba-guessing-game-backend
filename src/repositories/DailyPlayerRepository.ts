@@ -1,5 +1,5 @@
-import { IDailyPlayerRepository } from '../../domain/repositories/IDailyPlayerRepository';
-import { Player } from '../../domain/entities/Player';
+import { IDailyPlayerRepository } from '../domain/repositories/IDailyPlayerRepository';
+import { Player } from '../domain/entities/Player';
 
 export class MockDailyPlayerRepository implements IDailyPlayerRepository {
   #player: Player | null = null;

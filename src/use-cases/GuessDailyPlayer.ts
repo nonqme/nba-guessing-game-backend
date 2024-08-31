@@ -39,6 +39,7 @@ export class GuessDailyPlayer {
   }
   async execute(id: Player['id']): Promise<GuessResponse> {
     const dailyPlayer = await this.#dailyPlayerRepository.get();
+    console.log(dailyPlayer);
     if (!dailyPlayer) throw new Error('No daily player set');
 
     if (dailyPlayer.id !== id) {

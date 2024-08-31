@@ -1,6 +1,6 @@
-import type { Player } from '../../domain/entities/Player';
-import type { IPlayerRepository } from '../../domain/repositories/IPlayerRepository';
-import type { IDailyPlayerRepository } from '../../domain/repositories/IDailyPlayerRepository';
+import type { Player } from '../domain/entities/Player';
+import type { IPlayerRepository } from '../domain/repositories/IPlayerRepository';
+import type { IDailyPlayerRepository } from '../domain/repositories/IDailyPlayerRepository';
 
 export class SetDailyPlayer {
   #playerRepository: IPlayerRepository;

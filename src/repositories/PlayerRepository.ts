@@ -1,5 +1,5 @@
-import type { IPlayerRepository } from '../../domain/repositories/IPlayerRepository';
-import { Player } from '../../domain/entities/Player';
+import type { IPlayerRepository } from '../domain/repositories/IPlayerRepository';
+import { Player } from '../domain/entities/Player';
 
 export class MockPlayerRepository implements IPlayerRepository {
   async getRandomPlayer(): Promise<Player> {
@@ -26,6 +26,17 @@ export class MockPlayerRepository implements IPlayerRepository {
         height: '6-6',
         team: 'Chicago Bulls',
         positions: ['guard'],
+      });
+    } else if (id === 2) {
+      return new Player({
+        id: 2,
+        firstName: 'LeBron',
+        lastName: 'James',
+        country: 'USA',
+        birthDate: 1984,
+        height: '6-9',
+        team: 'Los Angeles Lakers',
+        positions: ['forward'],
       });
     }
     return null;
