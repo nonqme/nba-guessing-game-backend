@@ -39,7 +39,7 @@
     "node": ">=21.0.0"
   },
   "dependencies": {
-    "@prisma/client": "^5.19.1",
+    "@prisma/client": "^5.20.0",
     "@types/node-cron": "^3.0.11",
     "dotenv": "^16.4.5",
     "fastify": "^5.0.0",
